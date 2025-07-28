@@ -1,0 +1,44 @@
+27/5/2025 - set up the repo for the hunt the wumpus project.
+Spent some time learning about the original 1973 game.
+Created the cave class document and wrote the first attributes (name and decription).
+30/5/2025 - Write the main.py program to call the class and make the first cave object.
+Modified the attributes to set up name on initialisation
+Wrote setter and getter methods for each attributes. Started planning the layout of the caves.
+2/6/2025 - Wrote a dictionary attribute to store the links to other cave
+Wrote and tested a method to print the linked_caves dictionary to the terminal.
+3/6/2025 - Added code to the main program to allow the player to move between different cave objects.
+Set up a new Character class and test program.
+Created 'joyboy - The smelly Wumpus' in the test program and tested the conversation method.
+ 4/6/2025 - Set up enemy sub-class from character class. 
+ Also added enemey weakness by introducing "combat_item" to "Joyboy" the enemy with "touching grass".
+Wrote a method for fight() that overrides the fight() method in the super-class
+Updated the char_text code to test the new sub-class objects (particularly the weakness and fight_methods)
+6/6/2025 - Finishes testing the character in the char.test.py file. Added Joyboy obbject to the main program 
+and added it to the dunngeon object. Reworked the main loop to accept different inputs (moving, talking and fighting)
+- still need to finish the code to manage fighting.
+10/6/2025 - Completed the tutorial for Hunt The Wumpus. Started to make more ideas to continue on with the project.
+13/6/2025 - Came up with Idea to make the Game Terraria for the map of the game. The first idea of an Among us shaped map did
+not go well. not one bit...
+16/6/2025 - Continued working on my Terraria map, argueing with myself whether the level system or an open world with no restrictions. You level up when you travel through each level
+- Order of each level is forest, jungle, hallowed, and corruption.
+- started to change "cave" and "caverns" to "area" and "areas" to fit my terraria scenery. Messed up hard, I think. 
+17/6/2025 - Fixed the problem of changing cave/cavern to area/areas by deleting 'name', changing from 'def __init__name():' to 'def __init__():
+- Don't know how/why name was There
+- Continued planning the map and scenery; adding more areas to each biome, adding a Wise Hermit, asks you to choose 2 golden chests from "West" and "South".
+- West chest tranforms into golden chest mimic when chosen
+- South chest grants you to upgrade your iron sword to golden
+- Colour coded the areas according to their biome (except spawn: brown) 
+18/6/2025 - continued expanding my map in excel
+- Started putting the areas into my codespace 
+20/6/2025 - changed hallow biome to sky islands because i thought it would be cooler and make more sense having the north direction from the wooden house because it goes upwards
+- The idea for the sky island is that it requires completing level 2 in the jungle biome, adding 2 new areas called "A frayed knot" to climb up to the "Jungle shrine"
+- The jungle shrine will have a chest that contains a "Cloud in a bottle" and a sword upgrade called the "Blade of grass" making the sword shoot leaves as projectiles (melee/range weapon)
+1/07/2025 - continued my code with linked areas, inlcuding adding a new area called skystone house.
+2/07/2025 - added 2 new classes to put in character.py: treasure chest and inventory. Im not finished coding the inventory class fully yet, pls continue and dont forget. i begs of u.
+- I had help with copilot AI to explain and write me a code for these two classes
+24/7/25 - I continued to work on my map on excel, expanding on the skyisland with the inspired by another game with their characters, including HOG RIIDAAAAHHHHHH.
+-They were all enemy classes.
+25/7/25 - I continued on the excl map to think of ideas what each creatue would do when you fight and what would you fight with.
+- decided to make a dragon inspired by terraria called "Betsy".
+- This is the first boss you fight against. It will have 3 hitponits (hit it with your weapons 3 times).
+28/7/25 - I put all areas and link areas, moving onto coding what they will say and do (interactions action).
