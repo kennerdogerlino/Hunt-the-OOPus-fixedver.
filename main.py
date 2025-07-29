@@ -1,8 +1,14 @@
 """Imports cave to Area"""
 import os
 from area import Area
-from character import Enemy, Character, Guide
-from datetime import datetime
+from character import Enemy, Character, Guide, angy_gnome
+
+#sigma level tracking
+PLAYER_LEVEL = 1
+FOREST_COMPLETED = False
+JUNGLE_COMPLETED = False
+SKYLANDS_COMPLETED = False
+CRIMSON_COMPLETE = False
 
 def clear_console():
     """Clears the console in terminal"""
@@ -100,30 +106,97 @@ JAYCEE = Guide
 Wooden_house.set_character(JAYCEE)
 
 #enemy classes
+Angy_Gnome = angy_gnome
+
+def setup_game():
+    """Sets the game, where you always spawn"""
+    Wooden_house = Area("Wooden House")
+    Forest_entrance = Area("Forest Entrance")
 
 
+    Wooden_house.link_areas(Sky_Island_entrance, "North")
+    Wooden_house.link_areas(Forest_entrance, "East")
+    Wooden_house.link_areas(Crimson_Biome_entrance, "South")
+    Wooden_house.link_areas(Jungle_Biome_entrance, "West")
 
-current_area = Wooden_house
-DEAD = False
-while DEAD is not False:
-    print("\n")
-    current_area.get_details()
-    inhabitated = current_area.get_character()
-    if inhabitated is not None:
-        inhabitated.describe()
-    command = input("> ")
-    if command in ["North", "East", "South", "West"]:
-        current_area = current_area.move(command)
-    elif command == "Talk":
-        if inhabitated is not None:
-            inhabitated.talk()
-    elif command == "Fight":
-        if inhabitated is not None and isinstance(inhabitated, Enemy):
-            fight_with = input("What you fight with cuh? ")
-            if inhabitated.fight(fight_with) is True:
-                print("W's in the chat! You win the battle")
+    JAYCEE = Guide("JAYCEE, your definitly-helpful-but-sigma guide.")
+    Wooden_house.set_character(JAYCEE)
+
+    return Wooden_house
+
+def main():
+    global PLAYER_LEVEL, FOREST_COMPLETED, JUNGLE_COMPLETED, SKYLANDS_COMPLETED, CRIMSON_COMPLETED
+
+    current_area = Wooden_house
+    DEAD = False
+
+    print("Welcome to Hunt the OOPus")
+    print("Type directions like 'North', 'South', or type 'spawn' to return to Wooden House.")
+
+    while not DEAD:
+        print(f"\nYou are now in: {current_area.name}")
+        command = input("What do you want to do? ")
+
+        if command.lower() == "spawn":
+            current_area = Wooden_house
+            print("You returned to Wooden House.")
+
+            # Level progression unlocks
+            if FOREST_COMPLETED and PLAYER_LEVEL == 1:
+                PLAYER_LEVEL = 2
+                print("🌿 Level 2 (Jungle Biome) is now unlocked!")
+
+            elif JUNGLE_COMPLETED and PLAYER_LEVEL == 2:
+                PLAYER_LEVEL = 3
+                print("☁️ Level 3 (Skylands Biome) is now unlocked!")
+
+            elif SKYLANDS_COMPLETED and PLAYER_LEVEL == 3:
+                PLAYER_LEVEL = 4
+                print("🩸 Level 4 (Crimson Biome) is now unlocked!")
+
+            elif CRIMSON_COMPLETED and PLAYER_LEVEL == 4:
+                PLAYER_LEVEL = 5
+                print("🎉 You've completed all levels!")
+
+        elif command in ["North", "South", "East", "West"]:
+            next_area = current_area.linked_areas.get(command)
+
+            if not next_area:
+                print("You can't go that way.")
+                continue
+
+            # Gated biome access by level
+            if next_area in [Jungle_Biome_entrance, Jungle_ravine, Vine_covered_wall, Rainforest] and PLAYER_LEVEL < 2:
+                print("requirements: area level 1 must be completed first")
+                continue
+
+            elif next_area in [Sky_Island_entrance, Giant_Jaycee, Skyland_house, Two_MASSIVE_Gates,
+                               Goblin_Gang, Hog_Rider, Gooey_Golem, Skeleton_Army, Peka, Sneaky_Rock_Golem,
+                               A_massiver_gate, Betsy_The_Massive_Of_Massiveness] and PLAYER_LEVEL < 3:
+                print("requirements: area level 2 must be completed first")
+                continue
+
+            elif next_area in [Crimson_Biome_entrance, Prime_yogandog] and PLAYER_LEVEL < 4:
+                print("requirements: area level 3 must be completed first")
+                continue
+
             else:
-                print("Flabbergastinations! You lost the fight.")
-                DEAD = True
-        else:
-            print("There is no one here to fight with")
+                current_area = next_area
+
+        # === Check for biome completions ===
+        if current_area == Abandoned_Room and not FOREST_COMPLETED:
+            print("✅ You have completed the Forest biome (Level 1)!")
+            print("Type 'spawn' to return to Wooden House and unlock the next level.")
+            FOREST_COMPLETED = True
+
+        if current_area == Rainforest and not JUNGLE_COMPLETED:
+            print("✅ You have completed the Jungle biome (Level 2)!")
+            print("Type 'spawn' to return to Wooden House and unlock the next level.")
+            JUNGLE_COMPLETED = True
+
+        if current_area == Betsy_The_Massive_Of_Massiveness and not SKYLANDS_COMPLETED:
+            print("✅ You have completed the Skylands biome (Level 3)!")
+            print("Type 'spawn' to return to Wooden House and unlock the next level.")
+            SKYLANDS_COMPLETED = True
+
+
