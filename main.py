@@ -1,7 +1,8 @@
 """Imports cave to Area"""
 import os
 from area import Area
-from character import Enemy
+from character import Enemy, Character, Guide
+from datetime import datetime
 
 def clear_console():
     """Clears the console in terminal"""
@@ -95,6 +96,10 @@ Crimson_Biome_entrance.link_areas(Prime_yogandog, "South")
 Prime_yogandog.link_areas(Crimson_Biome_entrance, "North")
 
 #NPC peepul:
+JAYCEE = Guide
+Wooden_house.set_character(JAYCEE)
+
+#enemy classes
 
 
 

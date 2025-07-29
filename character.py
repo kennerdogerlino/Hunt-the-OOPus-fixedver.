@@ -76,4 +76,49 @@ class TreasureChest():
             self._valuables.clear()
         else:
             print("The chest is locked. You need permission to open it.")
-            
+    class Guide(Character):
+        def __init__(self, name, description): 
+            super().__init__(name, description)
+
+        def interact(self):
+            print("\nEnter E to interact with the guide")
+            key = input(">").upper
+
+            if key == "e":
+                self.show_dialogue()
+            else:
+                print("continue")
+
+        def show_dialogue(self):
+            print("\n***JAYCEE THE GUIDE INTERACTION***")
+            print("1. Where am I?")
+            print("2. What place is this?")
+            print("leave")
+            choice = input("Choose options (1 or 2 or leave): ")
+
+            if choice == "1":
+                print("JAYCEE: So... You've finally woken up.")
+                print(f"it's {date.now}")
+            elif choice == "2":
+                print("JAYCEE: You're in my Wooden house, your spawn point.")
+                print("I gave you my copper sword")
+                print("You can return here if have been defeated or if you choose to come back by entering 'spawn'")
+            elif choice == "leave":
+                print("You left the conversation.")
+
+            self.show_hint()
+
+        def show_hint(self):
+            print("'\nTy[e 'hint' for a clue, or press 'E' to exit to continue/start your Journey")
+            next_action = input(">").lower()
+
+            if next_action == "hint":
+                print("JAYCEE whispers: 'The forest to the East will be the firt area to explore. Head there to begin your journey.'")
+            elif next_action == "e": 
+                print("JAYCEE smirks creepily: 'Good Luck out there...'")
+
+    class Angy_Gnome(Enemy):
+        def __init__(self):
+            super().__init__("A very-way-too-agressive-but-insanely-small gnome")
+            self.set_weakness("copper sword")
+        
