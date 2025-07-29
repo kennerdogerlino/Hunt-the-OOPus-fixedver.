@@ -23,7 +23,7 @@ not go well. not one bit...
 - Order of each level is forest, jungle, hallowed, and corruption.
 - started to change "cave" and "caverns" to "area" and "areas" to fit my terraria scenery. Messed up hard, I think. 
 17/6/2025 - Fixed the problem of changing cave/cavern to area/areas by deleting 'name', changing from 'def __init__name():' to 'def __init__():
-- Don't know how/why name was There
+- Don't know how/why name was There 
 - Continued planning the map and scenery; adding more areas to each biome, adding a Wise Hermit, asks you to choose 2 golden chests from "West" and "South".
 - West chest tranforms into golden chest mimic when chosen
 - South chest grants you to upgrade your iron sword to golden
@@ -41,4 +41,10 @@ not go well. not one bit...
 25/7/25 - I continued on the excl map to think of ideas what each creatue would do when you fight and what would you fight with.
 - decided to make a dragon inspired by terraria called "Betsy".
 - This is the first boss you fight against. It will have 3 hitponits (hit it with your weapons 3 times).
+- Decided to make a Prime Yogan (All Seeing) to be the final boss in the crimson biome.
 28/7/25 - I put all areas and link areas, moving onto coding what they will say and do (interactions action).
+29/7/25 - Did WAAAAAAAAAYYYYYYY too much coding and planning in my head and in this codespace. started in school working on how to make an Guide NPC, with the help of copilot 
+- Gave copilot question on why it had to be imported from character.py file into the main, realised how obvious it was.
+- Ran out of time in school to make the first enemy subclass'angy gnome' spawning in the platforms to be your first encounter. Haven't coded him in yet.
+- Also i figured out how to fix github preventing me from push commits. It was doing this because I had "fatal: Need to specify how to reconcile divergent branches." error showing in the terminal
+- To fix this, I had to to type git pull --no-rebase
