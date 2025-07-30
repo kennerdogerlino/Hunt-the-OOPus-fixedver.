@@ -129,7 +129,7 @@ class Guide(Character):
         elif next_action == "e":
             print("JAYCEE smirks creepily: 'Good luck out there...'")
         else:
-            print("JAYCEE: If you're confused, just explore. .")
+            print("JAYCEE: If you're confused, just explore. You be fine... I think")
 
 class angy_gnome(Enemy):
     def __init__(self):
