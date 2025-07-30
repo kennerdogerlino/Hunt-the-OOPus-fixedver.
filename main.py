@@ -1,4 +1,4 @@
-"""Imports cave to Area"""
+"""Imports from files"""
 import os
 from area import Area
 from character import Enemy, Character, Guide, angy_gnome
@@ -107,6 +107,7 @@ Wooden_house.set_character(JAYCEE)
 
 #enemy classes
 Angy_Gnome = angy_gnome
+Platforms.set_character(angy_gnome)
 
 def setup_game():
     """Sets the game, where you always spawn"""
@@ -130,7 +131,7 @@ def main():
     current_area = Wooden_house
     DEAD = False
 
-    print("Welcome to Hunt the OOPus")
+    print("Welcome to 'Terraforamania'")
     print("Type directions like 'North', 'South', or type 'spawn' to return to Wooden House.")
 
     while not DEAD:
@@ -185,17 +186,17 @@ def main():
 
         # === Check for biome completions ===
         if current_area == Abandoned_Room and not FOREST_COMPLETED:
-            print("✅ You have completed the Forest biome (Level 1)!")
+            print("You have completed the Forest biome (Level 1)!")
             print("Type 'spawn' to return to Wooden House and unlock the next level.")
             FOREST_COMPLETED = True
 
         if current_area == Rainforest and not JUNGLE_COMPLETED:
-            print("✅ You have completed the Jungle biome (Level 2)!")
+            print("You have completed the Jungle biome (Level 2)!")
             print("Type 'spawn' to return to Wooden House and unlock the next level.")
             JUNGLE_COMPLETED = True
 
         if current_area == Betsy_The_Massive_Of_Massiveness and not SKYLANDS_COMPLETED:
-            print("✅ You have completed the Skylands biome (Level 3)!")
+            print("You have completed the Skylands biome (Level 3)!")
             print("Type 'spawn' to return to Wooden House and unlock the next level.")
             SKYLANDS_COMPLETED = True
 

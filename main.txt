@@ -1,0 +1,58 @@
+# Imports
+from area import Area
+from character import Guide, angy_gnome, TreasureChest
+import os
+
+def clear_console():
+    """Clears the console in terminal"""
+    os.system("cls" if os.name == "nt" else "clear")
+
+# === Setup Areas ===
+wooden_house = Area("Wooden House")
+wooden_house.set_description("Your cozy spawn point with creaky floors and a mysterious guide.")
+
+forest = Area("Enchanted Forest")
+forest.set_description("Tall trees whisper secrets. Danger lurks...")
+
+wooden_house.link_areas(forest, "east")
+forest.link_areas(wooden_house, "west")
+
+# === Setup Characters ===
+jaycee = Guide("Jaycee", "A mysterious figure with cryptic hints and a creepy smile.")
+wooden_house.set_character(jaycee)
+
+gnome = angy_gnome()
+forest.set_character(gnome)
+
+# === Setup Treasure Chest ===
+chest = TreasureChest("Jaycee's Chest")
+chest.set_owner("Jaycee")
+
+# === Main Game Loop ===
+current_area = wooden_house
+inventory = ["copper sword"]  # Starting item
+
+while True:
+    print("\n--- Current Location ---")
+    current_area.get_details()
+
+    character = current_area.get_character()
+    if character:
+        character.describe()
+        if isinstance(character, Guide):
+            character.interact()
+        elif isinstance(character, angy_gnome):
+            action = input("Do you want to fight the gnome? (yes/no): ").lower()
+            if action == "yes":
+                item = input("Choose a weapon to fight with: ").lower()
+                if item in inventory:
+                    character.fight(item)
+                else:
+                    print("You don’t have that item.")
+    
+    # Movement
+    command = input("Where do you want to go? (direction or 'exit'): ").lower()
+    if command == "exit":
+        print("Thanks for playing! Farewell, adventurer 🧝‍♂️")
+        break
+    current_area = current_area.move(command)
