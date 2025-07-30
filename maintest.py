@@ -1,3 +1,4 @@
+"""Ken Quisquino"""
 import os
 from area import Area
 from character import Guide, angy_gnome
@@ -21,7 +22,6 @@ Abandoned_Room = Area("Abandoned Room")
 Jungle_Biome_entrance = Area("Jungle Biome Entrance")
 Jungle_ravine = Area("Jungle Ravine")
 Vine_covered_wall = Area("Vine Covered Wall")
-Golden_chest = Area("Golden Chest")
 Rainforest = Area("Rainforest")
 Sky_Island_entrance = Area("Sky Island")
 Giant_Jaycee = Area("Giant the OBESE Giant")
@@ -98,11 +98,13 @@ current_area = Wooden_house
 DEAD = False
 
 print("Welcome to Hunt the OOPus")
-print("Type directions like 'North', 'South', or 'spawn' to return to Wooden House.")
+print("Type directions like 'North', 'South' (N, E, S, W), or 'spawn' to return to Wooden House.")
 
 while not DEAD:
-    print(f"\n🧭 You are now in: {current_area.name}")
+    clear_console()
+    print(f"\nYou are now in: 🧭 {current_area.name} 🧭")
     current_area.get_details()
+
 
     inhabitant = current_area.get_character()
     if inhabitant:
@@ -113,69 +115,82 @@ while not DEAD:
 
         elif isinstance(inhabitant, angy_gnome):
             print("You see the Angy Gnome snarling at you!")
-            action = input("Do you fight him? (yes/no): ").lower()
+            action = input("Do you fight him? (y/n): ").lower()
             if action == "yes":
-                weapon = input("What weapon do you use?: ").strip().lower()
+                weapon = input("What weapon do you use?: ").lower()
                 if inhabitant.fight(weapon):
-                    print("✅ You defeated the gnome!")
+                    print("You defeated the gnome!")
                     current_area.set_character(None)
                 else:
                     DEAD = True
                     continue
-            else:
-                print("You wisely chose not to engage...")
 
-    command = input("\n➡️ Direction? (North, South, East, West or 'spawn'): ").capitalize()
+    command = input("\nDirection? (enter 'North, East, South, West' or or 'spawn'): ").capitalize()
+
+    direction_map = {
+        "n":"North",
+        "e":"East",
+        "s":"South",
+        "w":"West",
+    }
 
     if command == "Spawn":
+        clear_console()
         current_area = Wooden_house
         print("Respawned in Wooden House.")
 
         if FOREST_COMPLETED and PLAYER_LEVEL == 1:
             PLAYER_LEVEL = 2
-            print("🌿 Jungle Biome unlocked!")
+            print("Jungle Biome unlocked!")
 
         elif JUNGLE_COMPLETED and PLAYER_LEVEL == 2:
             PLAYER_LEVEL = 3
-            print("☁️ Skylands Biome unlocked!")
+            print("Skylands Biome unlocked!")
 
         elif SKYLANDS_COMPLETED and PLAYER_LEVEL == 3:
             PLAYER_LEVEL = 4
-            print("🩸 Crimson Biome unlocked!")
+            print("Crimson Biome unlocked!")
 
         elif CRIMSON_COMPLETED and PLAYER_LEVEL == 4:
             PLAYER_LEVEL = 5
-            print("🏆 All levels completed!")
+            print("All levels completed!")
 
     elif command in ["North", "South", "East", "West"]:
         next_area = current_area.linked_areas.get(command)
+
         if next_area:
             # Level gating
             if next_area in [Jungle_Biome_entrance, Jungle_ravine, Vine_covered_wall, Rainforest] and PLAYER_LEVEL < 2:
-                print("🔒 You must complete Level 1 first.")
+                print("🔒 You must complete Level 1 first. 🔒")
             elif next_area in [Sky_Island_entrance, Giant_Jaycee, Skyland_house, Two_MASSIVE_Gates,
-                               Goblin_Gang, Hog_Rider, Gooey_Golem, Skeleton_Army, Peka, Sneaky_Rock_Golem,
-                               A_massiver_gate, Betsy] and PLAYER_LEVEL < 3:
-                print("🔒 You must complete Level 2 first.")
+                            Goblin_Gang, Hog_Rider, Gooey_Golem, Skeleton_Army, Peka, Sneaky_Rock_Golem,
+                            A_massiver_gate, Betsy] and PLAYER_LEVEL < 3:
+                print("🔒 You must complete Level 2 first. 🔒")
             elif next_area in [Crimson_Biome_entrance, Prime_yogandog] and PLAYER_LEVEL < 4:
-                print("🔒 You must complete Level 3 first.")
+                print("🔒 You must complete Level 3 first. 🔒")
             else:
                 current_area = next_area
+                clear_console()
         else:
-            print("🚧 No area in that direction.")
+            print("There's nothing there, bruh.")
 
     else:
-        print("❓ Invalid command. Try North, South, East, West, or Spawn.")
+        print("That ain't a command dingus. Try North, East, South, West or Spawn.")
+
+else:
+    print("That ain't a command dingus. Try North, East, South, West or Spawn.")
 
     # Completion triggers
     if current_area == Abandoned_Room and not FOREST_COMPLETED:
+        clear_console
         print("🎉 Forest Biome complete!")
         FOREST_COMPLETED = True
 
     if current_area == Rainforest and not JUNGLE_COMPLETED:
+        clear_console
         print("🎉 Jungle Biome complete!")
         JUNGLE_COMPLETED = True
 
-    if current_area == Betsy and not SKYLANDS_COMPLETED:
-    print("🎉 Skylands Biome complete!")
-    SKYLANDS_COMPLETED = True
+    #if current_area == Betsy and not SKYLANDS_COMPLETED:
+    #print("🎉 Skylands Biome complete!")
+    #SKYLANDS_COMPLETED = True

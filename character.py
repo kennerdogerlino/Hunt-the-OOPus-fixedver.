@@ -1,4 +1,9 @@
 """Character class for Hunt the OOPus"""
+import os
+
+def clear_console():
+    os.system("cls" if os.name == "nt" else "clear")
+
 class Character:
     """Defines attributes and methods for Character objects"""
     def __init__(self, char_name, char_description):
@@ -9,7 +14,7 @@ class Character:
 
     def describe(self):
         """Gives the characters a description"""
-        print(self.name + " has returned!")
+        print(self.name + " Jaycee has appeared")
         print(self.description)
 
     def set_conversation(self, conversation):
@@ -73,46 +78,58 @@ class TreasureChest():
             self._valuables.clear()
         else:
             print("The chest is locked. You need permission to open it.")
+
 class Guide(Character):
     def __init__(self, name, description): 
-        super().__init__(name, description)
+        self.name = name
+        self.description = description
+
+    def describe(self):
+        print(f"{self.name} is here. {self.description}")
 
     def interact(self):
-        print("\nEnter E to interact with the guide")
-        key = input(">").upper
+        print("\nEnter I to interact with the guide")
+        key = input("> ").upper()
 
-        if key == "e":
-                self.show_dialogue()
+        if key == "I":
+            self.show_dialogue()
         else:
-            print("continue")
+            print("You decide not to interact with the guide.")
 
     def show_dialogue(self):
-        print("\n***JAYCEE THE GUIDE INTERACTION***")
+        clear_console()
+        print("\n*** JAYCEE THE GUIDE INTERACTION ***")
         print("1. Where am I?")
         print("2. What place is this?")
-        print("leave")
-        choice = input("Choose options (1 or 2 or leave): ")
+        print("Type 'leave' to exit the conversation.")
+        
+        choice = input("Choose option (1, 2, or leave): ").upper()
 
         if choice == "1":
             print("JAYCEE: So... You've finally woken up.")
-            print("It's ")
+            print("It's a world of danger. Biomes lie in all directions.")
         elif choice == "2":
-            print("JAYCEE: You're in my Wooden house, your spawn point.")
-            print("I gave you my copper sword")
-            print("You can return here if have been defeated or if you choose to come back by entering 'spawn'")
+            print("JAYCEE: You're in my Wooden House, your spawn point.")
+            print("I gave you my copper sword.")
+            print("You can return here if you're defeated or by typing 'spawn'.")
         elif choice == "leave":
             print("You left the conversation.")
+            return
+        else:
+            print("JAYCEE: I don't understand what you're asking.")
 
         self.show_hint()
 
     def show_hint(self):
-        print("'\nTy[e 'hint' for a clue, or press 'E' to exit to continue/start your Journey")
-        next_action = input(">").lower()
+        print("\nType 'hint' for a clue, or press 'E' to exit and continue your journey.")
+        next_action = input("> ").upper()
 
         if next_action == "hint":
-            print("JAYCEE whispers: 'The forest to the East will be the firt area to explore. Head there to begin your journey.'")
-        elif next_action == "e": 
-            print("JAYCEE smirks creepily: 'Good Luck out there...'")
+            print("JAYCEE whispers: 'The forest to the East will be the first area to explore. Head there to begin your journey.'")
+        elif next_action == "e":
+            print("JAYCEE smirks creepily: 'Good luck out there...'")
+        else:
+            print("JAYCEE: If you're confused, just explore. .")
 
 class angy_gnome(Enemy):
     def __init__(self):
