@@ -48,3 +48,7 @@ not go well. not one bit...
 - Ran out of time in school to make the first enemy subclass'angy gnome' spawning in the platforms to be your first encounter. Haven't coded him in yet.
 - Also i figured out how to fix github preventing me from push commits. It was doing this because I had "fatal: Need to specify how to reconcile divergent branches." error showing in the terminal
 - To fix this, I had to to type git pull --no-rebase
+30/7/25 - Continued on fixing bugs and having a bit of friendly UI features, like changing North, East, So and West to N, E, S, W.
+- Changed the repo name and added another maintest.py file. 
+- Also added a new feature for the angy gnome enemy not letting you pass, unless you defeat it.
+- Added an add_item and remove.item def for the  

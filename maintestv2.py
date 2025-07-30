@@ -10,6 +10,8 @@ JUNGLE_COMPLETED = False
 SKYLANDS_COMPLETED = False
 CRIMSON_COMPLETED = False
 
+inventory = []
+
 def clear_console():
     os.system("cls" if os.name == "nt" else "clear")
 
@@ -18,7 +20,8 @@ Wooden_house = Area("Wooden House")
 Forest_entrance = Area("Forest Entrance")
 Giant_Living_Tree = Area("Giant Tree")
 Platforms = Area("Platforms")
-Abandoned_Room = Area("Abandoned Room")
+Abandoned_room = Area("Abandoned Room")
+Abandoned_room.add_item("Golden Chest (contains: Golden Sword, Living Wood Wand)")
 Jungle_Biome_entrance = Area("Jungle Biome Entrance")
 Jungle_ravine = Area("Jungle Ravine")
 Vine_covered_wall = Area("Vine Covered Wall")
@@ -48,7 +51,7 @@ Forest_entrance.link_areas(Wooden_house, "West")
 Forest_entrance.link_areas(Giant_Living_Tree, "East")
 Giant_Living_Tree.link_areas(Forest_entrance, "West")
 Giant_Living_Tree.link_areas(Platforms, "South")
-Platforms.link_areas(Abandoned_Room, "South")
+Platforms.link_areas(Abandoned_room, "South")
 
 Jungle_Biome_entrance.link_areas(Wooden_house, "East")
 Jungle_Biome_entrance.link_areas(Jungle_ravine, "West")
@@ -86,6 +89,9 @@ Betsy.link_areas(A_massiver_gate, "South")
 Crimson_Biome_entrance.link_areas(Prime_yogandog, "South")
 Prime_yogandog.link_areas(Crimson_Biome_entrance, "North")
 
+# == set items ==
+Abandoned_room.add_item("Golden chest")
+
 # === NPCs & Enemies ===
 guide = Guide("Jaycee", "Your definitely-helpful-but-sigma guide.")
 Wooden_house.set_character(guide)
@@ -108,6 +114,21 @@ direction_map = {
 
 while not DEAD:
     clear_console()
+
+
+    # Chest detection (make sure this block is inside the loop too!)
+    if current_area.items:
+        for item in current_area.items:
+            if "Golden Chest" in item:
+                print("\nYou found a Golden Chest! Open it? (y/n):")
+                if input("> ").lower() == "y":
+                    print("Inside the chest you find a gleaming Golden Sword and a mysterious Living Wood Wand.")
+                    inventory.append("Golden Sword")
+                    inventory.append("Living Wood Wand")
+                    current_area.remove_item(item)
+                    print("Items added to your inventory.")
+                    input("Press Enter to continue...")
+
     print(f"\nYou are now in: 🧭 {current_area.name} 🧭")
     current_area.get_details()
 
@@ -120,42 +141,53 @@ while not DEAD:
 
         elif isinstance(inhabitant, angy_gnome):
             print("You see the Angy Gnome snarling at you!")
-            action = input("Do you fight him? (y/n): ").lower()
+            action = input("Do you fight him? (yes/no): ").lower()
             if action == "yes":
                 weapon = input("What weapon do you use?: ").lower()
                 if inhabitant.fight(weapon):
                     print("You defeated the gnome!")
                     current_area.set_character(None)
                 else:
+                    print("Flabbergastinations! You lost the fight.")
                     DEAD = True
-                    continue
 
+    # Command input
     command = input("\nDirection? (enter N, E, S, W or 'spawn'): ").lower()
 
     if command == "spawn":
         current_area = Wooden_house
         print("Respawned in Wooden House.")
 
+    elif command == "inventory":
+        print("\nYour Inventory:")
+        if inventory:
+            for item in inventory:
+                print(f" - {item}")
+        else:
+            print(" (empty)")
+        input("Press Enter to continue...")
+
+        # Level updates
         if FOREST_COMPLETED and PLAYER_LEVEL == 1:
             PLAYER_LEVEL = 2
-            print("🟢 Jungle Biome unlocked!")
+            print("Jungle Biome unlocked!")
         elif JUNGLE_COMPLETED and PLAYER_LEVEL == 2:
             PLAYER_LEVEL = 3
-            print("🟢 Skylands Biome unlocked!")
+            print("Skylands Biome unlocked!")
         elif SKYLANDS_COMPLETED and PLAYER_LEVEL == 3:
             PLAYER_LEVEL = 4
-            print("🟢 Crimson Biome unlocked!")
+            print("Crimson Biome unlocked!")
         elif CRIMSON_COMPLETED and PLAYER_LEVEL == 4:
             PLAYER_LEVEL = 5
-            print("🏆 All levels completed!")
+            print("All levels completed!")
         continue
 
-    if command in direction_map:
+    elif command in direction_map:
         mapped_direction = direction_map[command]
         next_area = current_area.linked_areas.get(mapped_direction)
 
         if next_area:
-            # 🔒 Level Locking
+            # Level locks
             if next_area in [Jungle_Biome_entrance, Jungle_ravine, Vine_covered_wall, Rainforest] and PLAYER_LEVEL < 2:
                 print("🔒 You must complete Level 1 first. 🔒")
                 input("Press Enter to continue...")
@@ -171,35 +203,34 @@ while not DEAD:
                 input("Press Enter to continue...")
                 continue
 
-            # ⛔ Prevent entering Abandoned Room if gnome is alive
+            # Gnome block check
             if current_area.name == "Platforms" and mapped_direction == "South":
                 if Platforms.get_character() is not None:
                     print("⚠️ The Angy Gnome blocks your path! Defeat him before proceeding.")
                     input("Press Enter to continue...")
                     continue
 
-            # ✅ Passed all checks, move to next area
             current_area = next_area
         else:
-            print("❌ There's nothing in that direction.")
+            print("There's nothing in that direction.")
             input("Press Enter to continue...")
     else:
-        print("❌ Invalid command. Use N, S, E, W or 'spawn'.")
+        print("Invalid command you dingus. Use N, S, E, W or 'spawn'.")
         input("Press Enter to continue...")
 
-    # === Completion Triggers ===
-    if current_area == Abandoned_Room and not FOREST_COMPLETED:
+    # === Biome Completion Check ===
+    if current_area == Abandoned_room and not FOREST_COMPLETED:
         FOREST_COMPLETED = True
-        print("🎉 Forest Biome complete!")
+        print("Forest Biome complete!")
 
     if current_area == Rainforest and not JUNGLE_COMPLETED:
         JUNGLE_COMPLETED = True
-        print("🎉 Jungle Biome complete!")
+        print("Jungle Biome complete!")
 
     if current_area == Betsy and not SKYLANDS_COMPLETED:
         SKYLANDS_COMPLETED = True
-        print("🎉 Skylands Biome complete!")
+        print("Skylands Biome complete!")
 
     if current_area == Prime_yogandog and not CRIMSON_COMPLETED:
         CRIMSON_COMPLETED = True
-        print("🎉 Crimson Biome complete!")
+        print("Crimson Biome complete!")

@@ -52,7 +52,7 @@ class Enemy(Character):
             print("\nYou fend off " + self.name + " with the " + combat_item)
             return True
         else:
-            print(self.name + " swallows you whole! You died.")
+            print(self.name + " just owned you bro. You ded!")
 
     def help():
         """prints hints after each level"""

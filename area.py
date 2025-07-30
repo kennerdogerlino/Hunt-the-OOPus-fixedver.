@@ -7,6 +7,7 @@ class Area:
         self.description = None
         self.linked_areas = {}
         self.character = None
+        self.items = []
 
     def set_name(self, area_name):
         """Sets the area name"""
@@ -34,12 +35,13 @@ class Area:
         #print(self.name + "linked areas:" + repr(self.linked_areas))
 
     def get_details(self):
-        """gets details for the area"""
-        print(self.name)
-        print(self.description)
-        print("====================")
+        print(f"== {self.name} ==")
         for direction, area in self.linked_areas.items():
-            print("The " + area.get_name() + " is " + direction)
+            print(f"{direction}: {area.name}")
+        if self.items:
+            print("You see the following items here:")
+            for item in self.items:
+                print(f" - {item}")
 
     def move(self, direction):
         """moves to different area's depends on direction"""
@@ -56,3 +58,11 @@ class Area:
     def get_character(self):
         """Returns the name of the character object in this area"""
         return self.character
+
+    def add_item(self, item):
+        if item in self.items:
+            self.items.append(item)
+
+    def remove_item(self, item):
+        if item in self.items:
+            self.items.remove(item)
