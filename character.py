@@ -1,4 +1,3 @@
-"""Character class for Hunt the OOPus"""
 import os
 
 def clear_console():
@@ -7,88 +6,60 @@ def clear_console():
 class Character:
     """Defines attributes and methods for Character objects"""
     def __init__(self, char_name, char_description):
-        """Sets the class attributes"""    
         self.name = char_name
         self.description = char_description
         self.conversation = None
 
     def describe(self):
-        """Gives the characters a description"""
-        print(self.name + " Jaycee has appeared")
+        print(f"{self.name} has appeared.")
         print(self.description)
 
     def set_conversation(self, conversation):
-        """Sets what the character can say"""
         self.conversation = conversation
 
     def talk(self):
-        """Allows characters to talk to player"""
         if self.conversation is not None:
-            print(self.name + " says: " + self.conversation)
+            print(f"{self.name} says: {self.conversation}")
         else:
-            print(self.name + " does not want to talk to you.")
+            print(f"{self.name} does not want to talk to you.")
 
-    def fight(self):
-        """Allows characters to fight with the player"""
-        print(self.name + " doe not want to fight with you.")
+    def fight(self, combat_item):
+        print(f"{self.name} does not want to fight with you.")
         return True
 
 class Enemy(Character):
-    """Creates enemey class"""
+    """Enemy subclass of Character with combat functionality"""
     def __init__(self, char_name, char_description):
         super().__init__(char_name, char_description)
-        self.weakness = None #he dont even go to school no more.
+        self.weakness = None
 
     def set_weakness(self, item_weakness):
-        """Sets enemy weakness"""
-        self.weakness = item_weakness
+        # Normalize the weakness string
+        self.weakness = item_weakness.lower().strip()
 
     def get_weakness(self):
-        """Gets enemy weakness"""
         return self.weakness
 
     def fight(self, combat_item):
-        if combat_item == self.weakness:
-            print("\nYou fend off " + self.name + " with the " + combat_item)
+        # Normalize combat item before comparison
+        normalized_item = combat_item.lower().strip()
+        if normalized_item == self.weakness:
+            print(f"\nYou fend off {self.name} with the {combat_item}.")
             return True
         else:
-            print(self.name + " just owned you bro. You ded!")
-
-    def help():
-        """prints hints after each level"""
-
-class TreasureChest():
-    def __init__(self, chest_name):
-        self.chest_name = chest_name
-        self._valuable = []
-        self._owner = None
-        self.is_locked = True
-
-    def set_owner(self, owner_name):
-        self.owner = owner_name
-        print(f"{self.chest_name} is now reserved for {owner_name}.")
-
-    def add_valuable(self, item):
-        self.valuables.append(item)
-        print(f"{self.chest_name} has been added to {self.chest_name}.")
-
-    def retrive_valuable(self, item):
-        if not self.is_locked:
-            print(f"You find: {', '.join(self._valuables) if self._valuables else 'nothing... it’s empty!'}")
-            self._valuables.clear()
-        else:
-            print("The chest is locked. You need permission to open it.")
+            print(f"{self.name} just owned you. You are defeated!")
+            return False
 
 class Guide(Character):
-    def __init__(self, name, description): 
-        self.name = name
-        self.description = description
+    """Guide character with interaction options"""
+    def __init__(self, name, description):
+        super().__init__(name, description)
 
     def describe(self):
         print(f"{self.name} is here. {self.description}")
 
     def interact(self):
-        print("\nEnter I to interact with the guide")
+        print("\nEnter 'I' to interact with the guide.")
         key = input("> ").upper()
 
         if key == "I":
@@ -103,11 +74,12 @@ class Guide(Character):
         print("2. What place is this?")
         print("Type 'leave' to exit the conversation.")
         
-        choice = input("Choose option (1, 2, or leave): ").upper()
+        choice = input("Choose option (1, 2, or leave): ").lower().strip()
 
         if choice == "1":
             print("JAYCEE: So... You've finally woken up.")
             print("It's a world of danger. Biomes lie in all directions.")
+            print("I gave you a copper sword to begin your journey.")
         elif choice == "2":
             print("JAYCEE: You're in my Wooden House, your spawn point.")
             print("I gave you my copper sword.")
@@ -122,19 +94,46 @@ class Guide(Character):
 
     def show_hint(self):
         print("\nType 'hint' for a clue, or press 'E' to exit and continue your journey.")
-        next_action = input("> ").upper()
+        next_action = input("> ").lower().strip()
 
         if next_action == "hint":
             print("JAYCEE whispers: 'The forest to the East will be the first area to explore. Head there to begin your journey.'")
         elif next_action == "e":
-            print("JAYCEE smirks creepily: 'Good luck out there...'")
+            print("JAYCEE smirks: 'Good luck out there...'")
         else:
-            print("JAYCEE: If you're confused, just explore. You be fine... I think")
+            print("JAYCEE: If you're confused, just explore. You'll be fine... I think.")
 
 class angy_gnome(Enemy):
+    """Angy Gnome enemy with specific weakness"""
     def __init__(self):
         super().__init__(
-            "Angy Gnome", 
-            "A very-way-too-agressive-but-insanely-small gnome with rage issues")
+            "Angy Gnome",
+            "A very aggressive but teeny weeny gnome with rage issues, crashing out over touching grass.")
         self.set_weakness("copper sword")
-        
+        self.set_weakness("fortnite dance moves")
+
+    def describe(self):
+        print(f"{self.name} snarls at you angrily!")
+
+class Giant_bat(Enemy):
+    """A massive bat that can only be defeated with a bow and arrow."""
+    def __init__(self):
+        super().__init__(
+            "Giant Bat",
+            "A monstrous bat swoops above with razor wings. Only a well-aimed arrow can bring it down."
+        )
+        self.set_weakness("bow and arrow")
+
+    def describe(self):
+        print(f"{self.name} shrieks from above, its wings blotting out the canopy!")
+
+    def fight(self, combat_item):
+        normalized_item = combat_item.lower().strip()
+        if normalized_item == self.weakness:
+            print(f"\nYour arrow slices through the air and strikes true. {self.name} crashes into the treetops!")
+            return True
+        else:
+            print(f"\nYou try to fight with the {combat_item}, but the Giant Bat grabs you mid-air...")
+            print("Your body locks up in eternal immobilization as its venom takes hold.")
+            return False
+

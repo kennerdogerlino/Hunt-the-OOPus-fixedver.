@@ -43,12 +43,18 @@ not go well. not one bit...
 - This is the first boss you fight against. It will have 3 hitponits (hit it with your weapons 3 times).
 - Decided to make a Prime Yogan (All Seeing) to be the final boss in the crimson biome.
 28/7/25 - I put all areas and link areas, moving onto coding what they will say and do (interactions action).
-29/7/25 - Did WAAAAAAAAAYYYYYYY too much coding and planning in my head and in this codespace. started in school working on how to make an Guide NPC, with the help of copilot 
+29/7/25 - Did WAAAAAAAAAYYYYYYY too much coding and planning in my head and in this codespace. started in school working on how to make an Guide NPC, with the help of copilot.
 - Gave copilot question on why it had to be imported from character.py file into the main, realised how obvious it was.
 - Ran out of time in school to make the first enemy subclass'angy gnome' spawning in the platforms to be your first encounter. Haven't coded him in yet.
-- Also i figured out how to fix github preventing me from push commits. It was doing this because I had "fatal: Need to specify how to reconcile divergent branches." error showing in the terminal
-- To fix this, I had to to type git pull --no-rebase
+- Also i figured out how to fix github preventing me from push commits. It was doing this because I had "fatal: Need to specify how to reconcile divergent branches." error showing in the terminal.
+- To fix this, I had to to type git pull --no-rebase.
 30/7/25 - Continued on fixing bugs and having a bit of friendly UI features, like changing North, East, So and West to N, E, S, W.
 - Changed the repo name and added another maintest.py file. 
 - Also added a new feature for the angy gnome enemy not letting you pass, unless you defeat it.
-- Added an add_item and remove.item def for the  
+- Added an add_item and remove.item def for treasure chest to have items in them.
+- Having trouble with making it appear in the abandoned room, probably gonna ask for help in school.
+31/7/25 - had to use copilot this time, not chatgpt. I think I confused it a little, because there were wayyyyyyy too many mistakes I had clarify with that AI platform.
+- The parts that I had to fix were making sure the angy_gnome was still appearing. to fix this, I had forgot to put gnome in the parameters "Platforms.set_character(?)". Very sad.
+- Also decided to make a level check progress so thatI can finally continue to go West to the jungle biome.
+- I forgot the rest of the areas in the jungle :(
+- 

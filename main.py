@@ -1,60 +1,73 @@
-"""Imports from files"""
+"""Ken Quisquino"""
 import os
 from area import Area
-from character import Enemy, Character, Guide, angy_gnome
+from character import Guide, angy_gnome, Giant_bat
 
-#sigma level tracking
+# === Game State ===
 PLAYER_LEVEL = 1
 FOREST_COMPLETED = False
 JUNGLE_COMPLETED = False
 SKYLANDS_COMPLETED = False
-CRIMSON_COMPLETE = False
+CRIMSON_COMPLETED = False
+
+BOW_OBTAINED = False
+MIMIC_DEFEATED = False
+DEAD = False
+
+inventory = []
 
 def clear_console():
-    """Clears the console in terminal"""
     os.system("cls" if os.name == "nt" else "clear")
 
-#Spawnpoint (can respawn when dead)
-Wooden_house = Area("Wooden House")
+def check_level_progression():
+    global PLAYER_LEVEL
+    if FOREST_COMPLETED and PLAYER_LEVEL == 1:
+        PLAYER_LEVEL = 2
+        print("Jungle Biome unlocked!")
+    elif JUNGLE_COMPLETED and PLAYER_LEVEL == 2:
+        PLAYER_LEVEL = 3
+        print("Skylands Biome unlocked!")
+    elif SKYLANDS_COMPLETED and PLAYER_LEVEL == 3:
+        PLAYER_LEVEL = 4
+        print("Crimson Biome unlocked!")
+    elif CRIMSON_COMPLETED and PLAYER_LEVEL == 4:
+        PLAYER_LEVEL = 5
+        print("All levels completed!")
+    input("Press Enter to continue...")
 
-#Level 1 forest biome section
-Forest_entrance = Area("forest entrance")
+# === Area Setup ===
+Wooden_house = Area("Wooden House")
+Forest_entrance = Area("Forest Entrance")
 Giant_Living_Tree = Area("Giant Tree")
 Platforms = Area("Platforms")
-Abandoned_Room  = Area("Abandoned room")
+Abandoned_room = Area("Abandoned Room")
 
-#Level 2 Jungle Biome section
-Jungle_Biome_entrance = Area("Wooden House")
-Jungle_ravine = Area("Wooden House")
+Jungle_Biome_entrance = Area("Jungle Biome Entrance")
+Jungle_ravine = Area("Jungle Ravine")
+Vine_covered_wall = Area("Vine Covered Wall")
+Wrong_room = Area("?? CHEST ??")
+Correct_room = Area("Correct room")
+Giant_rainforest = Area("Giant Rainforest")
+A_frayed_knot = Area("A frayed-knot")
+Jungle_shrine = Area("Jungle Shrine")
 
-#South/down direction from jungle ravine
-Vine_covered_wall = Area("Vine covered wall")
-GOLDEN_CHEST = Area("???GOLDEN CHEST???")
-Golden_chest = Area("Golden Chest!")
-
-#West direction going past ravine
-Rainforest = Area("Rainforest")
-
-#Level 3 Sky Island Biome section
-Giant_Jaycee = Area("Jaycee the OBESE Giant")
 Sky_Island_entrance = Area("Sky Island")
+Giant_Jaycee = Area("Giant the OBESE Giant")
 Skyland_house = Area("Skyland House")
-Two_MASSIVE_Gates = Area("2 MASSIVE gates")
-Goblin_Gang = Area("Goblin gang")
+Two_MASSIVE_Gates = Area("Two MASSIVE Gates")
+Goblin_Gang = Area("Goblin Gang")
 Hog_Rider = Area("HOG RIIIDAAAAAAHHH")
 Gooey_Golem = Area("Gooey Golem")
-Skeleton_Army = Area("Skeleton army")
+Skeleton_Army = Area("Skeleton Army")
 Peka = Area("P.E.K.A")
-Sneaky_Rock_Golem = Area("Sneaky Golem in the pocket")
+Sneaky_Rock_Golem = Area("Sneaky Rock Golem")
 A_massiver_gate = Area("A MASSIVER GATE")
-Betsy_The_Massive_Of_Massiveness = Area("BETSY THE MASSIVE OF MASSIVENESS")
+Betsy = Area("BETSY THE MASSIVE OF MASSIVENESS")
 
-
-#Level 4 Crimson Biome section
 Crimson_Biome_entrance = Area("Crimson Biome")
-Prime_yogandog = Area ("Prime Yogandog (All seeing)")
+Prime_yogandog = Area("Prime Yogandog (All Seeing)")
 
-#Link_areas
+# === Linking Areas ===
 Wooden_house.link_areas(Sky_Island_entrance, "North")
 Wooden_house.link_areas(Forest_entrance, "East")
 Wooden_house.link_areas(Crimson_Biome_entrance, "South")
@@ -62,15 +75,22 @@ Wooden_house.link_areas(Jungle_Biome_entrance, "West")
 
 Forest_entrance.link_areas(Wooden_house, "West")
 Forest_entrance.link_areas(Giant_Living_Tree, "East")
-Giant_Living_Tree.link_areas(Platforms, "South")
 Giant_Living_Tree.link_areas(Forest_entrance, "West")
-Platforms.link_areas(Abandoned_Room, "South")
+Giant_Living_Tree.link_areas(Platforms, "South")
+Platforms.link_areas(Abandoned_room, "South")
 
 Jungle_Biome_entrance.link_areas(Wooden_house, "East")
 Jungle_Biome_entrance.link_areas(Jungle_ravine, "West")
+Jungle_ravine.link_areas(Jungle_Biome_entrance, "East")
 Jungle_ravine.link_areas(Vine_covered_wall, "South")
-Jungle_ravine.link_areas(Rainforest, "West")
-Rainforest.link_areas(Jungle_ravine, "East")
+Vine_covered_wall.link_areas(Jungle_ravine, "North")
+Vine_covered_wall.link_areas(Wrong_room, "West")
+Vine_covered_wall.link_areas(Correct_room, "South")
+Jungle_ravine.link_areas(Giant_rainforest, "West")
+Giant_rainforest.link_areas(Jungle_ravine, "East")
+Giant_rainforest.link_areas(A_frayed_knot, "West")
+A_frayed_knot.link_areas(Giant_rainforest, "East")
+A_frayed_knot.link_areas(Jungle_shrine, "North")
 
 Sky_Island_entrance.link_areas(Wooden_house, "South")
 Sky_Island_entrance.link_areas(Giant_Jaycee, "North")
@@ -95,109 +115,175 @@ Sneaky_Rock_Golem.link_areas(Peka, "South")
 Sneaky_Rock_Golem.link_areas(A_massiver_gate, "West")
 A_massiver_gate.link_areas(Gooey_Golem, "West")
 A_massiver_gate.link_areas(Sneaky_Rock_Golem, "East")
-A_massiver_gate.link_areas(Betsy_The_Massive_Of_Massiveness, "North")
-Betsy_The_Massive_Of_Massiveness.link_areas(A_massiver_gate, "South")
+A_massiver_gate.link_areas(Betsy, "North")
+Betsy.link_areas(A_massiver_gate, "South")
 
 Crimson_Biome_entrance.link_areas(Prime_yogandog, "South")
 Prime_yogandog.link_areas(Crimson_Biome_entrance, "North")
 
-#NPC peepul:
-JAYCEE = Guide
-Wooden_house.set_character(JAYCEE)
+# === NPCs ===
+guide = Guide("Jaycee", "Your definitely-helpful-but-sigma guide.")
+Wooden_house.set_character(guide)
 
-#enemy classes
-Angy_Gnome = angy_gnome
-Platforms.set_character(angy_gnome)
+gnome = angy_gnome()
+Platforms.set_character(gnome)
 
-def setup_game():
-    """Sets the game, where you always spawn"""
-    Wooden_house = Area("Wooden House")
-    Forest_entrance = Area("Forest Entrance")
+Giant_rainforest.set_character(Giant_bat)
 
+current_area = Wooden_house
 
-    Wooden_house.link_areas(Sky_Island_entrance, "North")
-    Wooden_house.link_areas(Forest_entrance, "East")
-    Wooden_house.link_areas(Crimson_Biome_entrance, "South")
-    Wooden_house.link_areas(Jungle_Biome_entrance, "West")
+print("Welcome to Hunt the OOPus")
+print("Type directions like 'North', 'South' (or just N, E, S, W), or 'spawn' to return to Wooden House.")
 
-    JAYCEE = Guide("JAYCEE, your definitly-helpful-but-sigma guide.")
-    Wooden_house.set_character(JAYCEE)
+direction_map = {
+    "n": "North",
+    "e": "East",
+    "s": "South",
+    "w": "West",
+}
 
-    return Wooden_house
+# === Game Loop ===
+while not DEAD:
+    clear_console()
 
-def main():
-    global PLAYER_LEVEL, FOREST_COMPLETED, JUNGLE_COMPLETED, SKYLANDS_COMPLETED, CRIMSON_COMPLETED
+    # === Biome Completion ===
+    if current_area == Abandoned_room and not FOREST_COMPLETED:
+        FOREST_COMPLETED = True
+        inventory.append("Copper Sword")
+        print("Forest Biome complete! You received the ✨⚔️  Golden Sword!")
+        input("Press Enter to continue...")
 
-    current_area = Wooden_house
-    DEAD = False
+    if current_area == Giant_rainforest and not JUNGLE_COMPLETED and BOW_OBTAINED:
+        JUNGLE_COMPLETED = True
+        print("Jungle Biome complete!")
+        input("Press Enter to continue...")
 
-    print("Welcome to 'Terraforamania'")
-    print("Type directions like 'North', 'South', or type 'spawn' to return to Wooden House.")
+    if current_area == Betsy and not SKYLANDS_COMPLETED:
+        SKYLANDS_COMPLETED = True
+        print("Skylands Biome complete!")
+        input("Press Enter to continue...")
 
-    while not DEAD:
-        print(f"\nYou are now in: {current_area.name}")
-        command = input("What do you want to do? ")
+    if current_area == Prime_yogandog and not CRIMSON_COMPLETED:
+        CRIMSON_COMPLETED = True
+        print("Crimson Biome complete!")
+        input("Press Enter to continue...")
 
-        if command.lower() == "spawn":
-            current_area = Wooden_house
-            print("You returned to Wooden House.")
+    check_level_progression()
 
-            # Level progression unlocks
-            if FOREST_COMPLETED and PLAYER_LEVEL == 1:
-                PLAYER_LEVEL = 2
-                print("🌿 Level 2 (Jungle Biome) is now unlocked!")
+    print(f"\nYou are in: {current_area.name}")
+    current_area.get_details()
 
-            elif JUNGLE_COMPLETED and PLAYER_LEVEL == 2:
-                PLAYER_LEVEL = 3
-                print("☁️ Level 3 (Skylands Biome) is now unlocked!")
-
-            elif SKYLANDS_COMPLETED and PLAYER_LEVEL == 3:
-                PLAYER_LEVEL = 4
-                print("🩸 Level 4 (Crimson Biome) is now unlocked!")
-
-            elif CRIMSON_COMPLETED and PLAYER_LEVEL == 4:
-                PLAYER_LEVEL = 5
-                print("🎉 You've completed all levels!")
-
-        elif command in ["North", "South", "East", "West"]:
-            next_area = current_area.linked_areas.get(command)
-
-            if not next_area:
-                print("You can't go that way.")
-                continue
-
-            # Gated biome access by level
-            if next_area in [Jungle_Biome_entrance, Jungle_ravine, Vine_covered_wall, Rainforest] and PLAYER_LEVEL < 2:
-                print("requirements: area level 1 must be completed first")
-                continue
-
-            elif next_area in [Sky_Island_entrance, Giant_Jaycee, Skyland_house, Two_MASSIVE_Gates,
-                               Goblin_Gang, Hog_Rider, Gooey_Golem, Skeleton_Army, Peka, Sneaky_Rock_Golem,
-                               A_massiver_gate, Betsy_The_Massive_Of_Massiveness] and PLAYER_LEVEL < 3:
-                print("requirements: area level 2 must be completed first")
-                continue
-
-            elif next_area in [Crimson_Biome_entrance, Prime_yogandog] and PLAYER_LEVEL < 4:
-                print("requirements: area level 3 must be completed first")
-                continue
-
+    # === Hermit Encounter ===
+    if current_area == Vine_covered_wall and not BOW_OBTAINED:
+        print("🧙‍♂️ A mysterious Hermit blocks the doors from WEST and SOUTH...")
+        print("He whisperinationisms: 'One door holds death. The other... well, uhhhhhh. Not death. EZ games. in my language, we call this, fortnite battle pass scenario'")
+        door_choice = input("Enter direction ('West' or 'South'): ").lower()
+        if door_choice in ["west", "w"]:
+            current_area = Wrong_room
+        elif door_choice in ["south", "s"]:
+            if MIMIC_DEFEATED:
+                current_area = Correct_room
             else:
-                current_area = next_area
+                print("The Hermit says: 'Face the mimic first, or be cursed forever.'")
+                input("Press Enter to continue...")
+                continue
 
-        # === Check for biome completions ===
-        if current_area == Abandoned_Room and not FOREST_COMPLETED:
-            print("You have completed the Forest biome (Level 1)!")
-            print("Type 'spawn' to return to Wooden House and unlock the next level.")
-            FOREST_COMPLETED = True
+    # === Mimic Battle ===
+    if current_area == Wrong_room and not MIMIC_DEFEATED:
+        print("A treasure chest reveals TEETH—it's the Mimic!")
+        fight = input("Fight it? (yes/no): ").lower()
+        if fight == "yes":
+            weapon = input("What weapon do you use?: ").lower()
+            if weapon in [item.lower() for item in inventory]:
+                print("You slay the Mimic in a shower of jungle guts!")
+                MIMIC_DEFEATED = True
+                current_area = Vine_covered_wall
+            else:
+                print("You lack the weapon. The Mimic devours you whole.")
+                DEAD = True
+        else:
+            print("You flee from the chest back to the Hermit...")
+            current_area = Vine_covered_wall
+            input("Press Enter to continue...")
+            continue
 
-        if current_area == Rainforest and not JUNGLE_COMPLETED:
-            print("You have completed the Jungle biome (Level 2)!")
-            print("Type 'spawn' to return to Wooden House and unlock the next level.")
-            JUNGLE_COMPLETED = True
+    # === Reward Room ===
+    if current_area == Correct_room and not BOW_OBTAINED:
+        print("🏹 You discover the legendary Bow and Arrow!")
+        inventory.append("Bow and Arrow")
+        BOW_OBTAINED = True
+        print("Return to the Jungle Ravine to continue...")
+        input("Press Enter to continue...")
 
-        if current_area == Betsy_The_Massive_Of_Massiveness and not SKYLANDS_COMPLETED:
-            print("You have completed the Skylands biome (Level 3)!")
-            print("Type 'spawn' to return to Wooden House and unlock the next level.")
-            SKYLANDS_COMPLETED = True
+    # === NPCs & Combat ===
+    character = current_area.get_character()
+    if character:
+        character.describe()
+        if isinstance(character, Guide):
+            character.interact()
+        elif isinstance(character, angy_gnome):
+            print("The Angy Gnome barks at you!")
+            fight = input("Do you fight him? (yes/no): ").lower()
+            if fight == "yes":
+                weapon = input("What weapon do you use?: ").lower()
+                if weapon == "copper sword" or "fortnite dance moves" and any(item.lower() == "copper sword" for item in inventory):
+                    print("You struck the gnome’s weakness! He cooketh foreals.")
+                    current_area.set_character(None)
+                elif weapon in [item.lower() for item in inventory]:
+                    print("You defeated the gnome!")
+                    current_area.set_character(None)
+                else:
+                    print("You lost the fight.")
+                    DEAD = True
 
+    # === Navigation ===
+    command = input("\nDirection? (N, E, S, W or 'spawn'): ").lower()
 
+    if command == "spawn":
+        current_area = Wooden_house
+        print("Returning to Wooden House...")
+
+    elif command == "inventory":
+        print("\nInventory:")
+        if inventory:
+            for item in inventory:
+                print(f" - {item}")
+        else:
+            print(" (empty)")
+        input("Press Enter to continue...")
+
+    elif command in direction_map:
+        direction = direction_map[command]
+        next_area = current_area.linked_areas.get(direction)
+
+        if next_area:
+            # Level gating logic
+            if next_area in [Jungle_Biome_entrance, Jungle_ravine, Vine_covered_wall, Giant_rainforest] and PLAYER_LEVEL < 2:
+                print("You must complete Level 1 first.")
+                input("Press Enter to continue...")
+                continue
+            elif next_area in [Sky_Island_entrance, Giant_Jaycee, Skyland_house, Two_MASSIVE_Gates,
+                               Goblin_Gang, Hog_Rider, Gooey_Golem, Skeleton_Army, Peka,
+                               Sneaky_Rock_Golem, A_massiver_gate, Betsy] and PLAYER_LEVEL < 3:
+                print("You must complete Level 2 first.")
+                input("Press Enter to continue...")
+                continue
+            elif next_area in [Crimson_Biome_entrance, Prime_yogandog] and PLAYER_LEVEL < 4:
+                print("You must complete Level 3 first.")
+                input("Press Enter to continue...")
+                continue
+
+            if current_area.name == "Platforms" and direction == "South":
+                if Platforms.get_character():
+                    print("The Angy Gnome blocks your path!")
+                    input("Press Enter to continue...")
+                    continue
+
+            current_area = next_area
+        else:
+            print("You can’t go that way.")
+            input("Press Enter to continue...")
+
+    else:
+        print("Invalid command.")
+        input("Press Enter to continue...")
