@@ -3,7 +3,7 @@ import os
 from area import Area
 from character import Guide, angy_gnome, Giant_bat
 
-# === Game State ===
+# Global function for tracking level
 PLAYER_LEVEL = 1
 FOREST_COMPLETED = False
 JUNGLE_COMPLETED = False
@@ -35,7 +35,7 @@ def check_level_progression():
         print("All levels completed!")
     input("Press Enter to continue...")
 
-# === Area Setup ===
+# Areas
 Wooden_house = Area("Wooden House")
 Forest_entrance = Area("Forest Entrance")
 Giant_Living_Tree = Area("Giant Tree")
@@ -67,7 +67,7 @@ Betsy = Area("BETSY THE MASSIVE OF MASSIVENESS")
 Crimson_Biome_entrance = Area("Crimson Biome")
 Prime_yogandog = Area("Prime Yogandog (All Seeing)")
 
-# === Linking Areas ===
+#linked areas
 Wooden_house.link_areas(Sky_Island_entrance, "North")
 Wooden_house.link_areas(Forest_entrance, "East")
 Wooden_house.link_areas(Crimson_Biome_entrance, "South")
@@ -121,7 +121,7 @@ Betsy.link_areas(A_massiver_gate, "South")
 Crimson_Biome_entrance.link_areas(Prime_yogandog, "South")
 Prime_yogandog.link_areas(Crimson_Biome_entrance, "North")
 
-# === NPCs ===
+#NPC classes
 guide = Guide("Jaycee", "Your definitely-helpful-but-sigma guide.")
 Wooden_house.set_character(guide)
 
@@ -142,11 +142,11 @@ direction_map = {
     "w": "West",
 }
 
-# === Game Loop ===
+#Game loop
 while not DEAD:
     clear_console()
 
-    # === Biome Completion ===
+    # Biome completion updates
     if current_area == Abandoned_room and not FOREST_COMPLETED:
         FOREST_COMPLETED = True
         inventory.append("Copper Sword")
@@ -173,7 +173,7 @@ while not DEAD:
     print(f"\nYou are in: {current_area.name}")
     current_area.get_details()
 
-    # === Hermit Encounter ===
+    #Hermit appears
     if current_area == Vine_covered_wall and not BOW_OBTAINED:
         print("🧙‍♂️ A mysterious Hermit blocks the doors from WEST and SOUTH...")
         print("He whisperinationisms: 'One door holds death. The other... well, uhhhhhh. Not death. EZ games. in my language, we call this, fortnite battle pass scenario'")
@@ -188,7 +188,7 @@ while not DEAD:
                 input("Press Enter to continue...")
                 continue
 
-    # === Mimic Battle ===
+    # Mimic turns into enemy
     if current_area == Wrong_room and not MIMIC_DEFEATED:
         print("A treasure chest reveals TEETH—it's the Mimic!")
         fight = input("Fight it? (yes/no): ").lower()
@@ -207,7 +207,7 @@ while not DEAD:
             input("Press Enter to continue...")
             continue
 
-    # === Reward Room ===
+    # bow n arrow in room pickup
     if current_area == Correct_room and not BOW_OBTAINED:
         print("🏹 You discover the legendary Bow and Arrow!")
         inventory.append("Bow and Arrow")
@@ -215,7 +215,7 @@ while not DEAD:
         print("Return to the Jungle Ravine to continue...")
         input("Press Enter to continue...")
 
-    # === NPCs & Combat ===
+    # NPCs and combat
     character = current_area.get_character()
     if character:
         character.describe()
@@ -236,7 +236,7 @@ while not DEAD:
                     print("You lost the fight.")
                     DEAD = True
 
-    # === Navigation ===
+    #Navigation N, E, S, W
     command = input("\nDirection? (N, E, S, W or 'spawn'): ").lower()
 
     if command == "spawn":
@@ -257,7 +257,7 @@ while not DEAD:
         next_area = current_area.linked_areas.get(direction)
 
         if next_area:
-            # Level gating logic
+            #Level gating logic
             if next_area in [Jungle_Biome_entrance, Jungle_ravine, Vine_covered_wall, Giant_rainforest] and PLAYER_LEVEL < 2:
                 print("You must complete Level 1 first.")
                 input("Press Enter to continue...")

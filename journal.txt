@@ -56,5 +56,6 @@ not go well. not one bit...
 31/7/25 - had to use copilot this time, not chatgpt. I think I confused it a little, because there were wayyyyyyy too many mistakes I had clarify with that AI platform.
 - The parts that I had to fix were making sure the angy_gnome was still appearing. to fix this, I had forgot to put gnome in the parameters "Platforms.set_character(?)". Very sad.
 - Also decided to make a level check progress so thatI can finally continue to go West to the jungle biome.
-- I forgot the rest of the areas in the jungle :(
-- 
+- I forgot the rest of the areas in the jungle (Giant bat, giant forest, A frayed knot, jungle shrine) :( 
+- The giant forest and the giant bat still needs work because it doesn't appear in game yet, same with the frayed knot and jungle shrine areas. 
+- made 
